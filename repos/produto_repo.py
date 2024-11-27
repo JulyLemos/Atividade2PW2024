@@ -12,7 +12,7 @@ class ProdutoRepo:
             cursor.execute(SQL_CRIAR_TABELA)
 
     @staticmethod
-    def inserir(produto: ProdutoModel) -> Optional[ProdutoModel]:
+    def inserir_categoria(produto: ProdutoModel) -> Optional[ProdutoModel]:
         with obter_conexao() as db:
             cursor = db.cursor()
             cursor.execute(SQL_INSERIR, (

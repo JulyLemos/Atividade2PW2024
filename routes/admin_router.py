@@ -2,7 +2,9 @@ from fastapi import APIRouter, Form, Path, Query, Request
 from fastapi.responses import RedirectResponse
 from fastapi.templating import Jinja2Templates
 
+from models.categoria_model import CategoriaModel
 from models.produto_model import ProdutoModel
+from repos.categoria_repo import CategoriaRepo
 from repos.produto_repo import ProdutoRepo
 from util.mensagens import *
 
@@ -90,4 +92,34 @@ def post_excluir_produto(id: int = Form(...)):
     else:
         response = RedirectResponse("/admin", 303)
         adicionar_mensagem_erro(response, "Não foi possível excluir o produto!")
+        return response
+    
+
+@router.get("/categoria")
+def get_index_categoria(request: Request):
+    categorias = CategoriaRepo.obter_todos()
+    response = templates.TemplateResponse(
+        "/admin/categoria.html", {"request": request, "categorias": categorias})
+    return response    
+
+@router.get("/inserir_categoria")
+def get_inserir_categoria(request: Request):
+    categoria = CategoriaModel(None, None)
+    response = templates.TemplateResponse(
+        "/admin/inserir_categoria", {"request": request, "categoria": categoria}
+    )
+    return response
+
+@router.post("/inserir_categoria")
+def post_inserir_categoria(
+    request: Request,
+    nome: str = Form(...)):
+    categoria = CategoriaModel(None, nome)
+    if CategoriaRepo.inserir_categoria(categoria):
+        response = RedirectResponse("/admin/categoria", 303)
+        adicionar_mensagem_sucesso(response, "Categoria inserido com sucesso!")
+        return response
+    else:
+        response = templates.TemplateResponse("/admin/inserir_produto.html", {"request": request, "categoria": categoria})
+        adicionar_mensagem_erro(response, "Corrija os campos e tente novamente.")
         return response
