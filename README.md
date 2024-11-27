@@ -2,6 +2,6 @@
 
 ## Membros da Equipe
 
-1. Fulano de Tal
-2. Sicrano de Tal
-3. Beltrano de Tal
+1. Heloísa Schaider
+2. July Lemos da Silva
+3. Maria Eduarda Soares
